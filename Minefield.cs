@@ -41,7 +41,7 @@ namespace Minefield
             }
         }
 
-        public void ReportHighScore()
+        public static void ReportHighScore()
         {
             // save this in a txt/csv
             if (!File.Exists(Path.GetTempPath() + "HighScores.txt"))
@@ -52,25 +52,30 @@ namespace Minefield
             Console.WriteLine("Current High scores:");
             var numberRegex = new Regex("[0-9]{1,}");
 
-            List<string> matches = highScoreList.Where(numberRegex.IsMatch).ToList();
-
-            foreach (var highScore in highScoreList)
-            {
-                var score = numberRegex.Matches(highScore);
-                scores.AddRange(from Match match in score
-                                select int.Parse(match.Value));
-                scores.Sort();
-            }
+            List<Match> matches = highScoreList.Select(x => numberRegex.Match(x)).ToList();
+            var scores = matches.Select(x => int.Parse(x.Value)).ToList();
+            scores.Sort();
             foreach (var score in scores)
             {
                 Console.WriteLine(string.Format("{0}", score));
             }
-
         }
 
         public void ReportShortestPath()
         {
+            // implement a path finding alg
+            var bestPath = grid.FindBestPath();
 
+            if (bestPath.Count < 1)
+            {
+                Console.WriteLine("This game was impossible");
+                return;
+            }
+            foreach (var coord in bestPath)
+            {
+                Console.WriteLine("Best path was: ");
+                Console.WriteLine(string.Format("{0},{1}", coord.Item1, coord.Item2));
+            }
         }
 
         private void WinGame()

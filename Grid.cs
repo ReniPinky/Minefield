@@ -67,5 +67,48 @@
                 _ => "?",
             };
         }
+
+        public List<(int, int)> FindBestPath()
+        {
+            var gridCopy = grid;
+            var intGrid = new int[8, 8];
+
+            int rowLength = grid.GetLength(0);
+            int colLength = grid.GetLength(1);
+            for (int y = 0; y < rowLength; y++)
+            {
+                for (int x = 0; x < colLength; x++)
+                {
+                    if (y == 0)
+                    {
+                        intGrid[y, x] = 2;
+                        break;
+                    }
+                    if (y == 7 && x == 0)
+                    {
+                        intGrid[y, x] = 1;
+                        break;
+                    }
+                    switch (gridCopy[y, x].Status)
+                    {
+                        case SpaceStatus.NoMine:
+                            intGrid[y, x] = 3;
+                            break;
+                        case SpaceStatus.HasMine:
+                            intGrid[y, x] = 0;
+                            break;
+                        case SpaceStatus.Found:
+                            intGrid[y, x] = 3;
+                            break;
+                        case SpaceStatus.BlownUp:
+                            intGrid[y, x] = 3;
+                            break;
+                    }
+                }
+            }
+
+            return GFG.FindPath(intGrid);
+
+        }
     }
 }

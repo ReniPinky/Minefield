@@ -8,5 +8,5 @@ do
 
 } while (!game.IsFinished);
 
-//game.ReportShortestPath();
-game.ReportHighScore();
+game.ReportShortestPath();
+Minefield.Minefield.ReportHighScore();
