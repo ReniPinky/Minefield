@@ -98,6 +98,5 @@ namespace Minefield
         {
             IsFinished = true;
         }
-
     }
 }

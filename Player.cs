@@ -2,14 +2,15 @@
 {
     public class Player
     {
-        private int _x, _y;
-        private int _lives = 3;
-        private int _moveCounter;
+        const int PATH_LIMIT = 7;
+        const int MAX_LIVES = 3;
+        private int _x, _y, _lives, _moveCounter;
 
         public Player()
         {
             _x = 0;
-            _y = 7;
+            _y = PATH_LIMIT;
+            _lives = MAX_LIVES;
             _moveCounter = 0;
         }
 
@@ -37,7 +38,7 @@
                     Console.WriteLine("Player moved up");
                     break;
                 case Direction.Down:
-                    if (_y >= 7)
+                    if (_y >= PATH_LIMIT)
                     {
                         Console.WriteLine("Cannot go down");
                         break;
@@ -55,7 +56,7 @@
                     _x--;
                     break;
                 case Direction.Right:
-                    if (_x >= 7)
+                    if (_x >= PATH_LIMIT)
                     {
                         Console.WriteLine("Cannot go right");
                         break;

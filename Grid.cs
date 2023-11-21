@@ -53,19 +53,7 @@
                     grid[y, x] = new Space();
                 }
             }
-            grid[7, 0].ClearInitialSpace();
-        }
-
-        private string PrintSpace(int x, int y)
-        {
-            return grid[y, x].Status switch
-            {
-                0 => "?",
-                (SpaceStatus)1 => "N", //TODO change this back to ?
-                (SpaceStatus)2 => "/",
-                (SpaceStatus)3 => "M",
-                _ => "?",
-            };
+            grid[rowLength - 1, 0].ClearInitialSpace();
         }
 
         public List<(int, int)> FindBestPath()
@@ -108,7 +96,18 @@
             }
 
             return GFG.FindPath(intGrid);
+        }
 
+        private string PrintSpace(int x, int y)
+        {
+            return grid[y, x].Status switch
+            {
+                0 => "?",
+                (SpaceStatus)1 => "?",
+                (SpaceStatus)2 => "/",
+                (SpaceStatus)3 => "M",
+                _ => "?",
+            };
         }
     }
 }

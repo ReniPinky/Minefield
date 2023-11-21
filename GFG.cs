@@ -15,7 +15,6 @@
             {
                 for (int j = 0; j < C; ++j)
                 {
-
                     // if there exists a cell in the matrix such
                     // that its value is 1 then push it to q
                     if (M[i, j] == 1)
