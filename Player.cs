@@ -28,12 +28,7 @@
             switch (direction)
             {
                 case Direction.Up:
-                    if (_y <= 0)
-                    {
-                        // This is the win condition?
-                        Console.WriteLine("Cannot go up");
-                        break;
-                    }
+                    // Game ends when you get to 0, no validation needed here
                     _y--;
                     Console.WriteLine("Player moved up");
                     break;

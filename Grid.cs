@@ -11,6 +11,9 @@
 
         public void PrintGrid(int playerY, int playerX)
         {
+            const char SPACER = '|';
+            const string END_ROW = "-----------------";
+            const char PLAYER_ICON = 'P';
             int rowLength = grid.GetLength(0);
             int colLength = grid.GetLength(1);
 
@@ -18,21 +21,21 @@
 
             for (int y = 0; y < rowLength; y++)
             {
-                Console.Write("|");
+                Console.Write(SPACER);
                 for (int x = 0; x < colLength; x++)
                 {
                     if (playerY == y && playerX == x)
                     {
-                        Console.Write("P");
-                        Console.Write("|");
+                        Console.Write(PLAYER_ICON);
+                        Console.Write(SPACER);
                         continue;
                     }
 
-                    Console.Write(string.Format("{0}", PrintSpace(x, y)));
-                    Console.Write("|");
+                    Console.Write(string.Format("{0}", ChoseIcon(x, y)));
+                    Console.Write(SPACER);
                 }
                 Console.Write(Environment.NewLine);
-                Console.Write("-----------------");
+                Console.Write(END_ROW);
                 Console.Write(Environment.NewLine);
             }
         }
@@ -95,18 +98,18 @@
                 }
             }
 
-            return GFG.FindPath(intGrid);
+            return BestFitPath.FindPath(intGrid);
         }
 
-        private string PrintSpace(int x, int y)
+        private char ChoseIcon(int x, int y)
         {
             return grid[y, x].Status switch
             {
-                0 => "?",
-                (SpaceStatus)1 => "?",
-                (SpaceStatus)2 => "/",
-                (SpaceStatus)3 => "M",
-                _ => "?",
+                0 => '?',
+                (SpaceStatus)1 => '?',
+                (SpaceStatus)2 => '/',
+                (SpaceStatus)3 => 'M',
+                _ => '?',
             };
         }
     }

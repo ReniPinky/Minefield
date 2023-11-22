@@ -4,29 +4,32 @@ namespace Minefield
 {
     public class Minefield
     {
-        private Grid grid;
-        private Player player;
+        private readonly Grid grid;
+        private readonly Player player;
 
-        public bool IsFinished { get; private set; }
-
-        public void IntialiseGame()
+        public Minefield()
         {
             grid = new Grid();
             player = new Player();
-            grid.CheckSpace(player.Y, player.X, HandleBlowUpEvent);
+            // Check the start space to make sure it is validated
+            grid.CheckSpace(player.Y, player.X, HandleBlowUp);
             grid.PrintGrid(player.Y, player.X);
             IsFinished = false;
+            // Subscribe to the event to be notified if the player dies
             player.PlayerDiedEvent += HandlePlayerDeath;
         }
+
+        public bool IsFinished { get; private set; }
 
         public void Move()
         {
             Console.WriteLine("What direction would you like to move: ");
             try
             {
+                // was told to assume correct input so little input validation here.
                 var NextMovement = (Direction)Console.ReadLine()?.ToUpper().ToCharArray()[0];
                 player.Move(NextMovement);
-                grid.CheckSpace(player.Y, player.X, HandleBlowUpEvent);
+                grid.CheckSpace(player.Y, player.X, HandleBlowUp);
 
                 if (player.Y == 0 && !IsFinished)
                 {
@@ -43,19 +46,28 @@ namespace Minefield
 
         public static void ReportHighScore()
         {
-            // save this in a txt/csv
-            if (!File.Exists(Path.GetTempPath() + "HighScores.txt"))
-            {
-                File.Create(Path.GetTempPath() + "HighScores.txt").Dispose();
-            }
-            var highScoreList = File.ReadAllLines(Path.GetTempPath() + "HighScores.txt").ToList();
-            Console.WriteLine("Current High scores:");
-            var numberRegex = new Regex("[0-9]{1,}");
+            string highScorePath = Path.GetTempPath() + "HighScores.txt";
 
+            if (!File.Exists(highScorePath))
+            {
+                File.Create(highScorePath).Dispose();
+            }
+
+            var highScoreList = File.ReadAllLines(highScorePath).ToList();
+            Console.WriteLine("Current High scores:");
+
+            // Match the Regex
+            var numberRegex = new Regex("[0-9]{1,}");
             List<Match> matches = highScoreList.Select(x => numberRegex.Match(x)).ToList();
+
+            // Cast the match to ints
             var scores = matches.Select(x => int.Parse(x.Value)).ToList();
+            // Sort lowest to highest
             scores.Sort();
-            foreach (var score in scores)
+            // Get the 10 top scores
+            var highScores = scores.GetRange(0, 10);
+            // Print scores
+            foreach (var score in highScores)
             {
                 Console.WriteLine(string.Format("{0}", score));
             }
@@ -82,6 +94,7 @@ namespace Minefield
         {
             Console.WriteLine("Congratulations you have won the game");
             IsFinished = true;
+
             //Open high score file and write to file
             using (StreamWriter writetext = File.AppendText(Path.GetTempPath() + "HighScores.txt"))
             {
@@ -89,12 +102,12 @@ namespace Minefield
             }
         }
 
-        private void HandleBlowUpEvent()
+        private void HandleBlowUp()
         {
             player.LoseLife();
         }
 
-        private void HandlePlayerDeath(object _, EventArgs e)
+        private void HandlePlayerDeath(object? _, EventArgs e)
         {
             IsFinished = true;
         }
